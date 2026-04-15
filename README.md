@@ -104,10 +104,10 @@ Caracteristicas incluidas:
 docker compose up -d db
 ```
 
-2. Aplicar migraciones:
+2. Aplicar migraciones con servicio auxiliar (sin depender de herramientas locales):
 
 ```bash
-dotnet ef database update --project src/Infrastructure --startup-project src/Api
+docker compose --profile tools run --rm migrate
 ```
 
 3. Ejecutar API:
@@ -150,7 +150,27 @@ npm run dev
 
 ## Ejecucion con Docker (todo el stack)
 
-Levanta base de datos, backend y frontend:
+Primera ejecucion recomendada:
+
+1. Levantar base de datos:
+
+```bash
+docker compose up -d db
+```
+
+2. Aplicar migraciones con servicio auxiliar (sin depender de herramientas locales):
+
+```bash
+docker compose --profile tools run --rm migrate
+```
+
+3. Levantar API y frontend en contenedores:
+
+```bash
+docker compose up -d --build api frontend
+```
+
+Ejecuciones siguientes (cuando la base ya tiene esquema):
 
 ```bash
 docker compose up -d --build
@@ -214,6 +234,7 @@ Archivo principal:
 Servicios:
 
 - db: PostgreSQL 16
+- migrate (profile tools): aplica migraciones EF Core
 - api: ASP.NET Core API
 - frontend: React SPA servida con Nginx
 
@@ -227,6 +248,7 @@ docker compose up -d --build
 
 Implementada en POST /products/bulk con enfoque eficiente y simple:
 
+- POST /products/bulk es la implementacion explicita del requisito de carga masiva del reto.
 - generacion aleatoria de productos validos
 - seleccion de categorias objetivo
 - insercion por lotes con AddRange + SaveChanges por batch
@@ -262,7 +284,25 @@ Pipeline basico en GitHub Actions:
 - archivo: .github/workflows/ci.yml
 - validaciones backend: restore, build y test
 - validacion frontend: npm ci + npm run build
+- validacion compose: docker compose config
 - validacion Docker: docker build de imagen API y frontend
+
+## Troubleshooting minimo
+
+- Error de CORS en frontend:
+  Revisar que el origen del frontend este incluido en Cors:AllowedOrigins.
+- API no conecta a PostgreSQL en Docker:
+  Verificar estado healthy del servicio db y que la cadena use Host=db en compose.
+- Error por esquema inexistente al iniciar API:
+  Ejecutar docker compose --profile tools run --rm migrate antes de levantar api/frontend.
+- Login falla en local:
+  Validar credenciales de prueba (admin/Admin123!) y VITE_API_BASE_URL en frontend/.env.
+
+## Notas para evaluador
+
+- El proyecto cubre el flujo full stack solicitado: login JWT, CRUD visible de productos y carga masiva.
+- POST /products/bulk complementa POST /product para soportar el requisito de rendimiento de carga hasta 100.000 registros por lotes.
+- El pipeline CI valida backend, frontend, compose y build de imagenes Docker para asegurar entregabilidad.
 
 ## Mejoras futuras
 

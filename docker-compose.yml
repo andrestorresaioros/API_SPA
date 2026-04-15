@@ -16,6 +16,26 @@ services:
       timeout: 5s
       retries: 5
 
+  migrate:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    environment:
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "1"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=catalog_db;Username=postgres;Password=postgres
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
+      dotnet tool install --global dotnet-ef --version 8.0.8 &&
+      export PATH="$PATH:/root/.dotnet/tools" &&
+      dotnet ef database update --project src/Infrastructure --startup-project src/Api
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles:
+      - tools
+
   api:
     build:
       context: .

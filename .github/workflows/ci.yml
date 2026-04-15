@@ -61,8 +61,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Validate docker compose
+        run: docker compose config
+
       - name: Build API Docker image
         run: docker build -f src/Api/Dockerfile -t api-spa-api:ci .
 
       - name: Build frontend Docker image
-        run: docker build -f frontend/Dockerfile -t api-spa-frontend:ci ./frontend
+        run: docker build -f frontend/Dockerfile --build-arg VITE_API_BASE_URL=http://localhost:8080 -t api-spa-frontend:ci ./frontend
