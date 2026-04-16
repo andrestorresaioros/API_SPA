@@ -4,6 +4,7 @@ import AppLayout from "./components/AppLayout";
 import LoginPage from "./pages/LoginPage";
 import ProductsPage from "./pages/ProductsPage";
 import ProductFormPage from "./pages/ProductFormPage";
+import CategoriesPage from "./pages/CategoriesPage";
 import { useAuth } from "./auth/useAuth";
 
 function HomeRedirect() {
@@ -25,6 +26,7 @@ export default function App() {
           </ProtectedRoute>
         }
       >
+        <Route path="categories" element={<CategoriesPage />} />
         <Route path="products" element={<ProductsPage />} />
         <Route path="products/new" element={<ProductFormPage mode="create" />} />
         <Route path="products/:id/edit" element={<ProductFormPage mode="edit" />} />

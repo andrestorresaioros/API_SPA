@@ -72,6 +72,7 @@ export default function ProductForm({ initialData, onSubmit, submitLabel }) {
   }, []);
 
   const hasCategories = useMemo(() => categories.length > 0, [categories]);
+  const quantityPerUnitLength = form.quantityPerUnit.length;
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -92,6 +93,11 @@ export default function ProductForm({ initialData, onSubmit, submitLabel }) {
 
     if (!form.categoryId) {
       setError("Selecciona una categoria.");
+      return;
+    }
+
+    if (form.quantityPerUnit.trim().length > 50) {
+      setError("Cantidad por unidad permite maximo 50 caracteres.");
       return;
     }
 
@@ -147,7 +153,9 @@ export default function ProductForm({ initialData, onSubmit, submitLabel }) {
               name="quantityPerUnit"
               value={form.quantityPerUnit}
               onChange={handleChange}
+              maxLength={50}
             />
+            <small className="field-hint">{quantityPerUnitLength}/50 caracteres</small>
           </div>
 
           <div className="field">

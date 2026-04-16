@@ -11,6 +11,26 @@ export class ApiError extends Error {
   }
 }
 
+function getErrorMessage(payload, status) {
+  if (payload?.message) {
+    return payload.message;
+  }
+
+  if (payload?.errors && typeof payload.errors === "object") {
+    for (const [field, messages] of Object.entries(payload.errors)) {
+      if (Array.isArray(messages) && messages.length > 0) {
+        return `${field}: ${messages[0]}`;
+      }
+    }
+  }
+
+  if (payload?.title) {
+    return payload.title;
+  }
+
+  return `Request failed with status ${status}`;
+}
+
 function buildUrl(path, query) {
   const base = API_BASE_URL.endsWith("/") ? API_BASE_URL : `${API_BASE_URL}/`;
   const cleanPath = path.startsWith("/") ? path.slice(1) : path;
@@ -64,7 +84,7 @@ export async function httpRequest(path, options = {}) {
       }
     }
 
-    const message = payload?.message ?? `Request failed with status ${response.status}`;
+    const message = getErrorMessage(payload, response.status);
     throw new ApiError(message, response.status, payload);
   }
 

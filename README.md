@@ -180,7 +180,7 @@ Servicios y puertos:
 
 - Frontend: http://localhost:8081
 - API: http://localhost:8080
-- PostgreSQL: localhost:5432
+- PostgreSQL: localhost:5432 (configurable con POSTGRES_HOST_PORT)
 
 Para detener:
 
@@ -289,6 +289,8 @@ Pipeline basico en GitHub Actions:
 
 ## Troubleshooting minimo
 
+- Puerto 5432 ocupado al levantar db:
+  Ejecutar con puerto alterno: POSTGRES_HOST_PORT=5433 docker compose up -d db.
 - Error de CORS en frontend:
   Revisar que el origen del frontend este incluido en Cors:AllowedOrigins.
 - API no conecta a PostgreSQL en Docker:

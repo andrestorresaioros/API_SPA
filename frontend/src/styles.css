@@ -29,6 +29,7 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
 }
 
 .brand {
@@ -40,6 +41,24 @@ a {
   display: flex;
   gap: 12px;
   align-items: center;
+}
+
+.top-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.top-nav-link {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  color: #0e4a8c;
+}
+
+.top-nav-link.active {
+  border-color: #0e4a8c;
+  background: #eaf2fc;
 }
 
 .page-container {
@@ -73,6 +92,11 @@ a {
   border-radius: 6px;
   padding: 9px 10px;
   font-size: 14px;
+}
+
+.field-hint {
+  color: #667b96;
+  font-size: 12px;
 }
 
 .actions-row {
