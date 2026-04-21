@@ -13,6 +13,9 @@ public class ProductsQueryRequest
     [MaxLength(200)]
     public string? Search { get; set; }
 
+    [Range(1, int.MaxValue)]
+    public int? ProductId { get; set; }
+
     public int? CategoryId { get; set; }
 
     [Range(0, 999999999)]
