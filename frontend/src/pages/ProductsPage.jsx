@@ -14,8 +14,10 @@ export default function ProductsPage() {
     pageSize: PAGE_SIZE,
     totalPages: 1
   });
+  const [searchIDInput, setSearchIDInput] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
+  const [searchProductId, setSearchProductId] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -45,6 +47,7 @@ export default function ProductsPage() {
         pageNumber,
         pageSize: PAGE_SIZE,
         search,
+        productId: searchProductId || undefined,
         categoryId: categoryId || undefined
       });
 
@@ -54,7 +57,7 @@ export default function ProductsPage() {
     } finally {
       setLoading(false);
     }
-  }, [categoryId, pageNumber, search]);
+  }, [categoryId, pageNumber, search, searchProductId]);
 
   useEffect(() => {
     loadProducts();
@@ -62,8 +65,18 @@ export default function ProductsPage() {
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
+
+    const trimmedId = searchIDInput.trim();
+
+    if (trimmedId && !/^\d+$/.test(trimmedId)) {
+      setError("El ID del producto debe ser un numero entero positivo.");
+      return;
+    }
+
+    setError("");
     setPageNumber(1);
     setSearch(searchInput.trim());
+    setSearchProductId(trimmedId ? Number(trimmedId) : "");
   };
 
   const handleCategoryChange = (event) => {
@@ -104,6 +117,13 @@ export default function ProductsPage() {
           placeholder="Buscar por nombre"
           value={searchInput}
           onChange={(event) => setSearchInput(event.target.value)}
+          style={{ minWidth: 260 }}
+        />
+
+        <input
+          placeholder="Buscar por ID"
+          value={searchIDInput}
+          onChange={(event) => setSearchIDInput(event.target.value)}
           style={{ minWidth: 260 }}
         />
 

@@ -114,6 +114,11 @@ public class ProductService : IProductService
             .Include(product => product.Category)
             .AsQueryable();
 
+        if (request.ProductId.HasValue)
+        {
+            query = query.Where(product => product.Id == request.ProductId.Value);
+        }
+
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
             var normalizedSearch = request.Search.Trim().ToLower();
