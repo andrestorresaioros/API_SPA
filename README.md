@@ -1,35 +1,42 @@
-# API_SPA
+# API_SPA — Catálogo de productos (.NET 8 + React)
 
-Prueba tecnica full stack para gestion de categorias y productos con backend en .NET y frontend en React.
+[![CI](https://github.com/andrestorresaioros/API_SPA/actions/workflows/ci.yml/badge.svg)](https://github.com/andrestorresaioros/API_SPA/actions/workflows/ci.yml)
+![.NET](https://img.shields.io/badge/.NET_8-512BD4?style=flat&logo=dotnet&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL_16-4169E1?style=flat&logo=postgresql&logoColor=white)
+![React](https://img.shields.io/badge/React_18-61DAFB?style=flat&logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
+
+Prueba técnica full stack para gestión de categorías y productos con backend en .NET y frontend en React.
 
 ## Clonado
 
 ```bash
-git clone <REPO_URL>
+git clone https://github.com/andrestorresaioros/API_SPA.git
 cd API_SPA
 ```
 
-## Descripcion del proyecto
+## Descripción del proyecto
 
-La solucion expone una API REST con autenticacion JWT y una SPA que cubre el flujo principal de negocio:
+La solución expone una API REST con autenticación JWT y una SPA que cubre el flujo principal de negocio:
 
 - login
 - listado de productos
-- creacion de productos
-- edicion de productos
-- eliminacion de productos
+- creación de productos
+- edición de productos
+- eliminación de productos
 - carga masiva por lotes
 
 El alcance funcional actual se centra en Category y Product.
 
 ## Arquitectura
 
-Se usa arquitectura por capas para mantener separacion clara de responsabilidades:
+Se usa arquitectura por capas para mantener separación clara de responsabilidades:
 
-- Api: entrada HTTP, configuracion, controladores
+- Api: entrada HTTP, configuración, controladores
 - Application: casos de uso, DTOs, servicios y mapeo explicito
 - Domain: entidades de negocio
-- Infrastructure: EF Core, DbContext, configuracion de persistencia
+- Infrastructure: EF Core, DbContext, configuración de persistencia
 
 ## Stack
 
@@ -54,7 +61,7 @@ Se usa arquitectura por capas para mantener separacion clara de responsabilidade
 
 ## Credenciales de prueba
 
-Usuario semilla configurado en appsettings:
+Usuario semilla configurado en `appsettings.json` (solo para desarrollo local; cámbialo, junto con `Jwt:Key`, antes de cualquier despliegue):
 
 - username: admin
 - password: Admin123!
@@ -88,15 +95,15 @@ Rutas implementadas:
 - /products/new
 - /products/:id/edit
 
-Caracteristicas incluidas:
+Características incluidas:
 
 - almacenamiento de JWT en localStorage
 - wrapper HTTP para adjuntar Bearer token
-- proteccion de rutas privadas
-- manejo basico de errores
-- limpieza de sesion y redireccion a /login ante 401 autenticado
+- protección de rutas privadas
+- manejo básico de errores
+- limpieza de sesión y redirección a /login ante 401 autenticado
 
-## Como correr backend
+## Cómo correr backend
 
 1. Levantar PostgreSQL con Docker Compose:
 
@@ -122,7 +129,7 @@ dotnet run --project src/Api
 curl http://localhost:5000/health
 ```
 
-## Como correr frontend
+## Cómo correr frontend
 
 1. Configurar variables de entorno:
 
@@ -148,9 +155,9 @@ npm run dev
 
 - http://localhost:5173
 
-## Ejecucion con Docker (todo el stack)
+## Ejecución con Docker (todo el stack)
 
-Primera ejecucion recomendada:
+Primera ejecución recomendada:
 
 1. Levantar base de datos:
 
@@ -180,7 +187,7 @@ Servicios y puertos:
 
 - Frontend: http://localhost:8081
 - API: http://localhost:8080
-- PostgreSQL: localhost:5432 (configurable con POSTGRES_HOST_PORT)
+- PostgreSQL: localhost:5432 (configurable con `POSTGRES_HOST_PORT`; ver `.env.example`)
 
 Para detener:
 
@@ -194,7 +201,7 @@ Para detener y limpiar volumen de BD:
 docker compose down -v
 ```
 
-## Ejecucion local / hibrida
+## Ejecución local / híbrida
 
 Modo local completo (sin contenedor de API/frontend):
 
@@ -238,7 +245,7 @@ Servicios:
 - api: ASP.NET Core API
 - frontend: React SPA servida con Nginx
 
-Levantado rapido del stack completo:
+Levantado rápido del stack completo:
 
 ```bash
 docker compose up -d --build
@@ -248,21 +255,21 @@ docker compose up -d --build
 
 Implementada en POST /products/bulk con enfoque eficiente y simple:
 
-- POST /products/bulk es la implementacion explicita del requisito de carga masiva del reto.
-- generacion aleatoria de productos validos
-- seleccion de categorias objetivo
-- insercion por lotes con AddRange + SaveChanges por batch
-- desactivacion temporal de AutoDetectChanges
+- POST /products/bulk es la implementación explicita del requisito de carga masiva del reto.
+- generación aleatoria de productos válidos
+- selección de categorías objetivo
+- inserción por lotes con AddRange + SaveChanges por batch
+- desactivación temporal de AutoDetectChanges
 - limpieza de ChangeTracker entre lotes
-- respuesta con metricas de ejecucion
+- respuesta con métricas de ejecución
 
-Limitacion actual:
+Limitación actual:
 
-- ejecucion sincrona en request/response
+- ejecución síncrona en request/response
 
-Evolucion recomendada:
+Evolución recomendada:
 
-- mover a procesamiento asincrono con colas y workers
+- mover a procesamiento asíncrono con colas y workers
 
 ## Pruebas
 
@@ -271,7 +278,7 @@ Backend:
 - UnitTests (xUnit)
 - IntegrationTests (xUnit + WebApplicationFactory)
 
-Ejecucion:
+Ejecución:
 
 ```bash
 dotnet test API_SPA.sln
@@ -279,20 +286,20 @@ dotnet test API_SPA.sln
 
 ## CI/CD
 
-Pipeline basico en GitHub Actions:
+Pipeline básico en GitHub Actions:
 
 - archivo: .github/workflows/ci.yml
 - validaciones backend: restore, build y test
-- validacion frontend: npm ci + npm run build
-- validacion compose: docker compose config
-- validacion Docker: docker build de imagen API y frontend
+- validación frontend: npm ci + npm run build
+- validación compose: docker compose config
+- validación Docker: docker build de imagen API y frontend
 
-## Troubleshooting minimo
+## Troubleshooting mínimo
 
 - Puerto 5432 ocupado al levantar db:
   Ejecutar con puerto alterno: POSTGRES_HOST_PORT=5433 docker compose up -d db.
 - Error de CORS en frontend:
-  Revisar que el origen del frontend este incluido en Cors:AllowedOrigins.
+  Revisar que el origen del frontend esté incluido en Cors:AllowedOrigins.
 - API no conecta a PostgreSQL en Docker:
   Verificar estado healthy del servicio db y que la cadena use Host=db en compose.
 - Error por esquema inexistente al iniciar API:
@@ -304,4 +311,12 @@ Pipeline basico en GitHub Actions:
 
 - El proyecto cubre el flujo full stack solicitado: login JWT, CRUD visible de productos y carga masiva.
 - POST /products/bulk complementa POST /product para soportar el requisito de rendimiento de carga hasta 100.000 registros por lotes.
-- El pipeline CI valida backend, frontend, compose y build de imagenes Docker para asegurar entregabilidad.
+- El pipeline CI valida backend, frontend, compose y build de imágenes Docker para asegurar entregabilidad.
+
+## Autor
+
+**César Andrés Torres Bernal** · [GitHub](https://github.com/andrestorresaioros) · [LinkedIn](https://www.linkedin.com/in/andr%C3%A9s-torres10)
+
+## Licencia
+
+Distribuido bajo la licencia MIT. Consulta [LICENSE](LICENSE).

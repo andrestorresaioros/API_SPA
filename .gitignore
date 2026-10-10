@@ -24,3 +24,8 @@ frontend/.env
 # OS files
 .DS_Store
 Thumbs.db
+
+# Variables de entorno
+.env
+.env.*
+!.env.example
